@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <title>登录</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="keywords"
+          content="Desk Signup form Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <!-- //Meta tag Keywords -->
+
+<!--    <link href="//fonts.googleapis.com/css?family=Mukta:200,300,400,500,600,700,800" rel="stylesheet">-->
+
+    <!--/Style-CSS -->
+    <link rel="stylesheet" href="css/login.css" type="text/css" media="all" />
+    <!--//Style-CSS -->
+    <script type="text/ecmascript" src="js/md5.js"></script>
+    <script type="text/ecmascript" src="js/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+<section class="w3l-forms-main-61">
+    <div class="form-inner">
+        <div class="wrapper">
+            <div class="d-grid top-form">
+<!--                <div class="logo">-->
+<!--                    <a class="brand-logo" ><span>Desk Signup form</a>-->
+<!--                    &lt;!&ndash; if logo is image enable this-->
+<!--                            <a class="brand-logo" href="#index.html">-->
+<!--                                <img src="image-path" alt="Your logo" title="Your logo" style="height:35px;" />-->
+<!--                            </a> &ndash;&gt;-->
+<!--                </div>-->
+            </div>
+            <div class="form-bg-blur">
+                <div class="form-61 form-register">
+                    <h4 class="form-head">登录</h4>
+
+                        <form action="login" method="GET" onsubmit="return checkdata()">
+                        <div class="">
+                            <p class="text-head">登录名</p>
+                            <input type="text" name="username" class="input" required />
+                        </div>
+                        <div class="">
+                            <p class="text-head">密码</p>
+                            <input id="passwd" type="password" name="password" class="input" required />
+                        </div>
+                        <button type="submit" class="signinbutton btn">登录</button>
+                        <label class="remember">
+                            未注册用户 <a href="signup.html">注册</a>
+                        </label>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            <div class="wrapper">
+                <p class="copy-footer-29">© 2021 fycmusic.cn </p>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    function checkdata() {
+        console.log("dfafasd");
+        var passwordv= document.getElementById('passwd');
+        passwordv.value= hex_md5(passwordv.value);
+        console.log(passwordv.value);
+        return true;
+    }
+</script>
+</body>
+
+</html>
