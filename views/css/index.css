@@ -1,0 +1,113 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+html{
+    background-color: #2fa8ec;
+    scroll-behavior: smooth;
+}
+
+.nav {
+    position: absolute;
+    z-index: 100;
+    opacity: 0;
+    padding-top: 300px;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 300ms;
+    transition-duration: 300ms;
+}
+.nav--active .nav {
+    opacity: 1;
+    background-color: #333;
+}
+.nav__list {
+    margin: 0;
+    padding: 10px;
+}
+.nav__item {
+    list-style-type: none;
+    text-align: center;
+    margin:100px auto;
+}
+.nav__link {
+    font-size: 3.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #FFFFFF;
+    opacity: 1;
+    -webkit-transition: opacity 300ms ease-in-out;
+    transition: opacity 300ms ease-in-out;
+}
+/* Default navigation icon */
+.nav__trigger {
+    display: block;
+    position: absolute;
+    width: 90px;
+    height: 80px;
+    right: 40px;
+    top: 80px;
+    z-index: 200;
+}
+.nav--active .nav__trigger {
+    opacity: 1;
+}
+.nav__icon {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 15px;
+    background-color: #FFFFFF;
+    -webkit-transition-property: background-color, -webkit-transform;
+    transition-property: background-color, -webkit-transform;
+    transition-property: background-color, transform;
+    transition-property: background-color, transform, -webkit-transform;
+    -webkit-transition-duration: 300ms;
+    transition-duration: 300ms;
+}
+.nav__icon:before,
+.nav__icon:after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 15px;
+    position: absolute;
+    background: #FFFFFF;
+    -webkit-transition-property: margin, -webkit-transform;
+    transition-property: margin, -webkit-transform;
+    transition-property: margin, transform;
+    transition-property: margin, transform, -webkit-transform;
+    -webkit-transition-duration: 300ms;
+    transition-duration: 300ms;
+}
+.nav__icon:before {
+    margin-top: -25px;
+}
+.nav__icon:after {
+    margin-top: 25px;
+}
+
+
+
+.style-4 .nav {
+    width: 100%;
+    height: 100%;
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+}
+.style-4 .nav--active .nav {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+}
+.style-4 .nav--active .nav__icon {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+.style-4 .nav__link {
+    opacity: 0;
+    -webkit-transition-delay: 350ms;
+    transition-delay: 350ms;
+}
+.style-4 .nav--active .nav__link {
+    opacity: 1;
+}

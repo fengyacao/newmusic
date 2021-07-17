@@ -3,13 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>fycmusic</title>
+    <link rel="stylesheet" type="text/css" href="css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="css/htmleaf-demo.css">
+    <link type="text/css" rel="stylesheet" href="css/index.css" />
+    <script type="text/ecmascript" src="js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/fycmusic.js"></script>
 </head>
 <body>
-    <div style="background-color: cornflowerblue">test for nodejs
-        <form action="song" method="get">
-            <input type="text" name="id"><br>
-            <input type="submit">
+    <div class="style-4" id="menubar" >
+        <form  id="comit" action="operation" method="get">
+            <a href="#" class="nav__trigger"><span class="nav__icon"></span></a>
+            <nav class="nav" >
+                <ul class="nav__list" >
+                    <hr />
+                    <li class="nav__item" style="text-align: center"><a class="nav__link" href="#" onClick="formSubmit(1)">播放页</a></li>
+                    <hr />
+                    <li class="nav__item" ><a class="nav__link" href="#" onClick="formSubmit(2)">关于</a></li>
+                    <hr />
+                    <li class="nav__item" ><a class="nav__link" href="#" onClick="formSubmit(3)">登录</a></li>
+                    <hr />
+                </ul>
+            </nav>
+            <input id="bucomit" type="text" name="id" value="1" style="display: none">
         </form>
+    </div>
+<!--    <%- include('footer.html')%>-->
+    <div id="musicplay" style="display: none">
+        <%-audiodata%>
     </div>
 </body>
 </html>
