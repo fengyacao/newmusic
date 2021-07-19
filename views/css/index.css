@@ -6,7 +6,20 @@ html{
     background-color: #2fa8ec;
     scroll-behavior: smooth;
 }
-
+#top{
+    opacity: 0.5;
+    width:100%;
+    position: absolute;
+    top: 0;
+    right: 200px;
+    z-index: 100;
+    background-color: whitesmoke;
+}
+#canvas{
+    position: relative;
+    height: 200px;
+    width:100%;
+}
 .nav {
     position: absolute;
     z-index: 100;
@@ -26,9 +39,13 @@ html{
     padding: 10px;
 }
 .nav__item {
+    font-size: 3.2em;
     list-style-type: none;
     text-align: center;
-    margin:100px auto;
+    margin:0 auto;
+}
+.nav__item:hover{
+    background-color: #3498DB;
 }
 .nav__link {
     font-size: 3.2em;

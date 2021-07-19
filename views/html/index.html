@@ -10,26 +10,25 @@
     <script type="text/javascript" src="js/fycmusic.js"></script>
 </head>
 <body>
+<%- include('toper.html')%>
     <div class="style-4" id="menubar" >
         <form  id="comit" action="operation" method="get">
             <a href="#" class="nav__trigger"><span class="nav__icon"></span></a>
             <nav class="nav" >
-                <ul class="nav__list" >
-                    <hr />
-                    <li class="nav__item" style="text-align: center"><a class="nav__link" href="#" onClick="formSubmit(1)">播放页</a></li>
-                    <hr />
-                    <li class="nav__item" ><a class="nav__link" href="#" onClick="formSubmit(2)">关于</a></li>
-                    <hr />
-                    <li class="nav__item" ><a class="nav__link" href="#" onClick="formSubmit(3)">登录</a></li>
-                    <hr />
-                </ul>
+                <hr /><br><br>
+                <div class="nav__item" onClick="formSubmit(1)"><a href="#">播放页</a></div>
+                <br><br>
+                <div class="nav__item" onClick="formSubmit(2)"><a href="#">关于</a></div>
+                <br><br>
+                <div class="nav__item" onClick="formSubmit(3)"><a href="#">登录</a></div>
+                <br><br><hr />
             </nav>
             <input id="bucomit" type="text" name="id" value="1" style="display: none">
         </form>
     </div>
-<!--    <%- include('footer.html')%>-->
-    <div id="musicplay" style="display: none">
-        <%-audiodata%>
-    </div>
+
+<!--    <div id="musicplay" style="display: none">-->
+<!--       <%-audiodata%>-->
+<!--    </div>-->
 </body>
 </html>
