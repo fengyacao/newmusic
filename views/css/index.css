@@ -3,7 +3,7 @@
     padding: 0;
 }
 html{
-    background-color: #2fa8ec;
+    background-color: powderblue;
     scroll-behavior: smooth;
 }
 #top{
@@ -14,6 +14,35 @@ html{
     right: 200px;
     z-index: 100;
     background-color: whitesmoke;
+}
+#content{
+    overflow :auto;
+    position: absolute;
+    width:100%;
+    margin-top: 300px;
+    margin-bottom: 300px;
+}
+#content .img{
+    margin-bottom: 100px;
+    background-image: -webkit-linear-gradient(#2fa8ec,whitesmoke);
+    height: 500px;
+}
+#content .musiclist{
+    margin-bottom: 20px;
+    background-image: -webkit-linear-gradient(mediumspringgreen,whitesmoke);
+}
+
+.textlinem{
+    color: midnightblue;
+    font-size: 3.2em;
+}
+
+.textline{
+    position: absolute;
+    color:black;
+    left: 540px;
+    top: 10%;
+    font-size: 2.2em;
 }
 #canvas{
     position: relative;
@@ -128,3 +157,37 @@ html{
 .style-4 .nav--active .nav__link {
     opacity: 1;
 }
+
+#foot{
+    width:100%;
+    position: absolute;
+    bottom: 0;
+    background-color: whitesmoke;
+}
+#foot .progress{
+     position: relative;
+     background-color: lightgreen;
+     height: 100px;
+     width:100%;
+ }
+
+#foot .last{
+    background-color: #521e18;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 3.2em;
+    float: left;
+    height: 200px;
+    width:50%;
+}
+#foot .next{
+    background-color: black;
+    padding-top: 15px;
+    text-align: center;
+    font-size: 3.2em;
+    float: left;
+    height: 200px;
+    width:50%;
+}
+.progress_bg{height: 100%;width:100%; border: 1px solid #ddd; border-radius: 0;overflow: hidden;background-color:#f2f2f2;}/**/
+.progress_bar{ position: absolute; width: 0; height: 100%; border-radius: 0;background: #5FB878; }

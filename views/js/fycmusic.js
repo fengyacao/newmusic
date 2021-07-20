@@ -2,25 +2,44 @@ function formSubmit(value){
     document.getElementById('bucomit').value=value;
     document.getElementById('comit').submit();
 }
-
+function formSubmitalbum(value){
+    document.getElementById('socomit').value=value;
+    document.getElementById('contentcomit').submit();
+}
+function formSubmitsong(value){
+    document.getElementById('socomit').value=value;
+    document.getElementById('contentcomit').submit();
+}
 $(function(){
+
+
+
     var flag=false;
+    var contentheight=window.innerHeight-600;
+
+    var styleh={
+        height:contentheight + 'px'
+    }
+    $('#content').css(styleh)
+
     $('.nav__trigger').on('click', function(e){
         e.preventDefault();
         $(this).parent().toggleClass('nav--active');
     });
     let audio = document.getElementById('audio');
-    $('.waveform').on('click',function () {
+    $('.waveform').on('click',function (){
         let audio = document.getElementById('audio');
         console.log($('audio').attr("play"));
         if($('audio').attr("play")=="true"){
             $('.waveform').css({backgroundColor:"aquamarine" });
             $('#audio').attr({play:false});
             audio.pause();
+            clearInterval(real)
         }else{
             $('#audio').attr({play:true});
             $('.waveform').css({backgroundColor:"whitesmoke"});
             audio.play();
+            oTimer();
         }
         if(!flag){
             let AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -60,10 +79,7 @@ $(function(){
             globalID = requestAnimationFrame(render);
             flag=true;
         }
-        console.log(totalTime);
-        console.log(realTime);
-        console.log(realMinute);
-        console.log(realSecond);
+
     });
 
     /* 歌曲进度条 */
@@ -74,24 +90,64 @@ $(function(){
     var totalMinute;
     var totalSecond;
     var oTotalTime;
-    /* 确保获取成功 */
-    setTimeout( function(){
-        audio.addEventListener("canplay", function() {
-            console.log(parseInt(audio.duration));
+    var realTime;
+    var realMinute;
+    var realSecond;
+
+    function doubleNum(n){
+        return (n <10) ? ("0" + n) : (n);
+    }
+
+    var odiv=document.getElementById("mydiv");
+    var obar=document.getElementById("mybar");
+    var obg=document.getElementById("mybg");
+    var kuan = odiv.clientWidth;
+    var leftmine=0;
+    obg.onclick=function (e){
+        console.log("ok");
+        leftmine = e.pageX +"px";
+        console.log(leftmine);
+        obar.style.width = leftmine;
+        realTime = parseInt((e.pageX*totalTime)/kuan);
+        realMinute = doubleNum(parseInt(realTime/60));
+        realSecond = doubleNum(realTime%60);
+        //oRealTime = $(".realTime")[0];
+        audio.currentTime = realTime;
+        //oRealTime.innerHTML = realMinute + ":" + realSecond;
+    }
+    obar.onclick=function (e){
+        console.log("ok");
+        leftmine = e.pageX +"px";
+        console.log(leftmine);
+        obar.style.width = leftmine;
+        realTime = parseInt((e.pageX*totalTime)/kuan);
+        realMinute = doubleNum(parseInt(realTime/60));
+        realSecond = doubleNum(realTime%60);
+        //oRealTime = $(".realTime")[0];
+        audio.currentTime = realTime;
+        //oRealTime.innerHTML = realMinute + ":" + realSecond;
+    }
+    /* 定时器 */
+    function oTimer(){
+        real = setInterval( function(){
             totalTime = parseInt(audio.duration);
-        });
-        totalMinute = doubleNum(parseInt(totalTime/60));
-        totalSecond = doubleNum(totalTime%60);
-        oTotalTime = $(".totalTime")[0];
-        oTotalTime.innerHTML = totalMinute + ":" + totalSecond;
-    },200);
-    /* 当前时长 */
-    var realTime = parseInt(audio.currentTime);
-    var realMinute = doubleNum(parseInt(realTime/60));
-    var realSecond = doubleNum(realTime%60);
-
-
-
-
+            console.log(totalTime);
+            realTime = parseInt(audio.currentTime);
+            realMinute = doubleNum(parseInt(realTime/60));
+            realSecond = doubleNum(realTime%60);
+            // oRealTime.innerHTML = realMinute + ":" + realSecond;
+            // left = (realTime*400)/totalTime;
+            leftmine = (realTime*kuan)/totalTime;
+             obar.style.width = leftmine  + "px";
+            // if(audio.ended){
+            //     Play = false;
+            //     oPaly.className = "play iconfont Iconfont icon-zanting";
+            //     oPaly.title = "播放";
+            // }
+            console.log(realTime);
+            console.log(realMinute);
+            console.log(realSecond);
+        },1000)
+    }
 
 })

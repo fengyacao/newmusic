@@ -30,6 +30,7 @@ var sqlconnection = mysql.createConnection({
 
 var needjump=false;
 var relogintime=86400000;
+var htmlinner="";
 
 sqlconnection.connect(function(err) {
     if (err) {
@@ -40,10 +41,9 @@ sqlconnection.connect(function(err) {
 });
 
 
-function querytimes(){
+function querytimes(userid){
     return new Promise(resolve => {
-        // var sqlq="SELECT lastlogin FROM logintb WHERE userid=\"" +query.userid+"\"";
-        var sqlq = "SELECT lastlogin FROM logintb WHERE userid=\"1\"";
+        var sqlq="SELECT lastlogin FROM logintb WHERE userid=\"" +userid+"\"";
         console.log(sqlq);
         sqlconnection.query(sqlq, function (err, results, fields) {
             if (err) {
@@ -64,30 +64,117 @@ function querytimes(){
     });
 }
 
+function queryinnerhtml(){
+    return new Promise(resolve => {
+        var sqlq="SELECT albumname,releasedate,releaseby  FROM albumtb";
+        htmlinner="";
+        console.log(sqlq);
+        sqlconnection.query(sqlq, function (err, results, fields) {
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                return;
+            }
+            var datastring = JSON.stringify(results);
+            var datare = JSON.parse(datastring);
+            var releasedate="";
+
+            htmlinner+="<form  id=\"contentcomit\" action=\"album\" method=\"get\">";
+            for(var i=0;i<datare.length;i++){
+                releasedate=sd.format(datare[i].releasedate,'YYYY-MM-DD');
+                htmlinner+="<div class='img'>"
+                htmlinner+="<img  src=\"images/"+i+".jpg\" onClick=\"formSubmitalbum("+(i+1)+")\"/>"
+                htmlinner+="<a class='textline' > 专辑名："+datare[i].albumname+"<br><br>发行日期："+releasedate+"<br><br>发行单位："+datare[i].releaseby+"</a>"
+                htmlinner+="</div>"
+            }
+            htmlinner+="<input id=\"socomit\" type=\"text\" name=\"id\" value=\"0\" style=\"display: none\"> ";
+            htmlinner+="</form>";
+            resolve('resolved');
+        });
+    });
+}
+
+function queryinnerhtmlsong(albumid) {
+    return new Promise(resolve => {
+        var sqlq="SELECT musicname FROM musictb WHERE albumid=\"" +albumid+"\"";
+        htmlinner="";
+        console.log(sqlq);
+        sqlconnection.query(sqlq, function (err, results, fields) {
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                return;
+            }
+            var datastring = JSON.stringify(results);
+            var datare = JSON.parse(datastring);
+            console.log(datare);
+            htmlinner+="<form  id=\"contentcomit\" action=\"song\" method=\"get\">";
+            for(var i=0;i<datare.length;i++){
+                htmlinner+="<div class='musiclist'onClick=\"formSubmitsong("+(i+1)+")\">"
+                htmlinner+="<a class='textlinem' > "+(i+1)+" :"+datare[i].musicname+"</a>"
+                htmlinner+="</div>"
+            }
+            htmlinner+="<input id=\"socomit\" type=\"text\" name=\"id\" value=\"0\" style=\"display: none\"> ";
+            htmlinner+="</form>";
+            resolve('resolved');
+        });
+    });
+}
+
 app.get("/",(req,res)=>{
     let audiodata="<audio></audio>";
     res.render("index",{
-         audiodata:audiodata
+        audiodata:audiodata,
+        htmlinner:htmlinner
     });
 });
 
-app.get("/operation",(req,res)=>{
-    //to do operation
+app.get("/operation",async(req,res)=>{
+    let query=req.query;
+    let audiodata="<audio></audio>";
+
+    if(query.id==1){
+        let resutlt=await queryinnerhtml();
+        res.render("index",{
+            audiodata:audiodata,
+            htmlinner:htmlinner
+        });
+    }
+
+    if(query.id==3){
+        res.render("login",{
+            messagedate:messagedate
+        });
+    }
+
+});
+
+app.get("/album",async (req,res)=> {
+    let query=req.query;
+    let audiodata="<audio></audio>";
+    let resutlt=await queryinnerhtmlsong(query.id);
+
+    res.render("index",{
+        htmlinner:htmlinner,
+        audiodata:audiodata
+    });
 });
 
 app.get("/song",async (req,res)=>{
-
+    let messagedate="<script>alert(\"超时重新登录\");</script>";
     let query=req.query;
-    let audiodata="<audio src=\"./music/audio/"+query.id+".flac\" autoplay loop></audio>";
+    let audiodata="<audio id=\"audio\" src=\"./music/audio/"+query.id+".flac\"></audio>";
 
-    let resutlt=await querytimes();
+    let resutlt=await querytimes(1);
     if(needjump){
         console.log("--1");
         needjump=false;
-        res.redirect("login.html");
+        res.render("login",{
+            messagedate:messagedate
+        });
     }else{
+        audiodata+="<script>document.getElementById('waveform').click();</script>"
         console.log("--2");
         res.render("index",{
+            htmlinner:htmlinner,
             audiodata:audiodata
         });
     }
@@ -96,6 +183,8 @@ app.get("/song",async (req,res)=>{
 
 app.get("/login",(req,res)=>{
     let query=req.query;
+    let audiodata="<audio></audio>";
+    let messagedate="<script>alert(\"不存在的用户名\");</script>";
     var sqlq="SELECT userid FROM usertb WHERE username=\"" +query.username+"\"";
     console.log(sqlq);
     sqlconnection.query(sqlq,function (err, results, fields) {
@@ -106,8 +195,10 @@ app.get("/login",(req,res)=>{
 
         console.log(results.length);
         if(results.length==0){
-            res.send(`<script>alert("不存在的用户名");location.href="login.html"</script>`);
-            return;
+            res.render("login",{
+                messagedate:messagedate
+            });
+            return;login
         }
 
         var datastring=JSON.stringify(results);
@@ -132,10 +223,17 @@ app.get("/login",(req,res)=>{
                     if(error)
                         console.log(error);
                 });
-                res.redirect("index.html");
+
+                res.render("index",{
+                    htmlinner:htmlinner,
+                    audiodata:audiodata
+                });
             }
             else
-                res.send(`<script>alert("密码错误");location.href="login.html"</script>`);
+                messagedate="<script>alert(\"密码错误\");</script>";
+                res.render("login",{
+                    messagedate:messagedate
+            });
         });
     });
 });
