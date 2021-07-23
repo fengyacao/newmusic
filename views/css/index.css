@@ -6,6 +6,23 @@ html{
     background-color: powderblue;
     scroll-behavior: smooth;
 }
+hr {
+    height:20px;
+    background-image: -webkit-linear-gradient(powderblue,white);
+}
+
+#nowplay{
+    text-align: center;
+    position: absolute;
+    width:100%;
+    height: 100px;
+    background-image: -webkit-linear-gradient(powderblue,lightsteelblue,powderblue);
+    margin-top: 200px;
+}
+#nowplay .nowplaytext{
+
+    font-size: 3.6em;
+}
 #top{
     opacity: 0.5;
     width:100%;
@@ -15,6 +32,16 @@ html{
     z-index: 100;
     background-color: whitesmoke;
 }
+#lyricplay{
+    text-align: center;
+    position: absolute;
+    width:100%;
+    margin-top: 300px;
+    height: 200px;
+    background-color:powderblue;
+
+}
+
 #content{
     overflow :auto;
     position: absolute;
@@ -49,6 +76,29 @@ html{
     height: 200px;
     width:100%;
 }
+.loginstatus{
+    position: absolute;
+    width:100%;
+    background-image: -webkit-linear-gradient(#333,powderblue,#333);
+    text-align: center;
+    z-index: 200;
+    opacity: 0;
+    right: 200px;
+    padding-top: 50px;
+    height: 200px;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 300ms;
+    transition-duration: 300ms;
+}
+.loginstatus .textstyle{
+    font-size: 3.2em;
+    color: white;
+}
+.nav--active .loginstatus{
+    opacity: 1;
+}
+
 .nav {
     position: absolute;
     z-index: 100;
@@ -145,6 +195,16 @@ html{
     -webkit-transform: translateY(0);
     transform: translateY(0);
 }
+
+.style-4 .loginstatus {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+}
+.style-4 .nav--active .loginstatus {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+}
+
 .style-4 .nav--active .nav__icon {
     -webkit-transform: rotate(90deg);
     transform: rotate(90deg);
@@ -162,7 +222,7 @@ html{
     width:100%;
     position: absolute;
     bottom: 0;
-    background-color: whitesmoke;
+    background-color: #3498DB;
 }
 #foot .progress{
      position: relative;
@@ -170,24 +230,12 @@ html{
      height: 100px;
      width:100%;
  }
+#foot .playarea{
+    position: relative;
+    padding-top: 10px;
+    padding-left: 10px;
+    height: 200px;
+}
 
-#foot .last{
-    background-color: #521e18;
-    padding-top: 15px;
-    text-align: center;
-    font-size: 3.2em;
-    float: left;
-    height: 200px;
-    width:50%;
-}
-#foot .next{
-    background-color: black;
-    padding-top: 15px;
-    text-align: center;
-    font-size: 3.2em;
-    float: left;
-    height: 200px;
-    width:50%;
-}
 .progress_bg{height: 100%;width:100%; border: 1px solid #ddd; border-radius: 0;overflow: hidden;background-color:#f2f2f2;}/**/
 .progress_bar{ position: absolute; width: 0; height: 100%; border-radius: 0;background: #5FB878; }

@@ -6,23 +6,38 @@
     <link rel="stylesheet" type="text/css" href="css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="css/htmleaf-demo.css">
     <link type="text/css" rel="stylesheet" href="css/index.css" />
+    <link type="text/css" rel="stylesheet" href="css/iconfont.css" />
     <script type="text/ecmascript" src="js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="js/fycmusic.js"></script>
 </head>
 <body>
+
+<textarea id="textae" style="display: none;" heightvalue="600">
+   <%-textcont%>
+</textarea>
+<div id="Lyric" style="display: none" ></div>
+<div id="nowplay">
+<%-nowplay%>
+</div>
+<div id="lyricplay"></div>
 <%- include('toper.html')%>
     <div class="style-4" id="menubar" >
         <form  id="comit" action="operation" method="get">
             <a href="#" class="nav__trigger"><span class="nav__icon"></span></a>
+            <div id="loginstatus" class="loginstatus" onClick="formSubmit(4)">
+                <%-logintext%>
+<!--                <a id="textforlogin" class="textstyle" href="#">未登录请登录</a>-->
+            </div>
             <nav class="nav" >
                 <hr /><br><br>
                 <div class="nav__item" onClick="formSubmit(1)"><a href="#">播放页</a></div>
                 <br><br>
                 <div class="nav__item" onClick="formSubmit(2)"><a href="#">关于</a></div>
                 <br><br>
-                <div class="nav__item" onClick="formSubmit(3)"><a href="#">登录</a></div>
+                <div class="nav__item" onClick="formSubmit(3)"><a href="#">注销</a></div>
                 <br><br><hr />
             </nav>
+            <input id="menuidentify" type="text" name="identfy" value="" style="display: none">
             <input id="bucomit" type="text" name="id" value="1" style="display: none">
         </form>
     </div>

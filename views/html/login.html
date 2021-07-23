@@ -16,6 +16,21 @@
     <link rel="stylesheet" href="css/login.css" type="text/css" media="all" />
     <!--//Style-CSS -->
     <script type="text/ecmascript" src="js/md5.js"></script>
+    <script type="text/ecmascript" src="js/fp.min.js"></script>
+    <script>
+        window.onload= function(){
+            initUserUUId();
+        }
+        function initUserUUId() {
+            FingerprintJS.load().then(request => {
+                request.get().then(result => {
+                    const UUID = result.visitorId;
+                    console.log("uuid: "+UUID);
+                    document.getElementById('uuid').value=UUID;
+                });
+            });
+        }
+    </script>
 </head>
 
 <body>
@@ -45,7 +60,14 @@
                             <p class="text-head">密码</p>
                             <input id="passwd" type="password" name="password" class="input" required />
                         </div>
-                        <button type="submit" class="signinbutton btn">登录</button>
+                        <div class="" style="display: none">
+                            <input id="uuid" type="text" name="uuid" value="" />
+                        </div>
+                        <label class="remember">
+                            <input type="checkbox" name="check" value="force">
+                            <span class="checkmark"></span><a href="#">强制注销当前用户并登录？</a>
+                        </label>
+                        <button id="butt" type="submit" class="signinbutton btn">登录</button>
                         <label class="remember">
                             未注册用户 <a href="signup.html">注册</a>
                         </label>
@@ -62,10 +84,9 @@
 </section>
 <script>
     function checkdata() {
-        console.log("dfafasd");
         var passwordv= document.getElementById('passwd');
         passwordv.value= hex_md5(passwordv.value);
-        console.log(passwordv.value);
+        // console.log(passwordv.value);
         return true;
     }
 </script>

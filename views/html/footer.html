@@ -3,9 +3,16 @@
         <p class="progress_bar" id="mybar"> </p>
         <p class="progress_bg" id="mybg"> </p>
     </div>
-    <form  class="footcomit" action="song" method="get">
-        <div class="last" ><a href="#">上一首</a></div>
-        <div class="next"><a href="#">下一首</a></div>
-        <input class="bucomit" type="text" name="id" value="1" style="display: none">
-    </form>
+    <div class="playarea">
+        <form  id="comitfoot" action="foot" method="get">
+            <span id="prev" class="iconfont icon-prev" onClick="formSubmitfoot(0)" ></span>
+            <span id="pause" class="iconfont icon-stop-playing" onClick="formSubmitfoot(1)"></span>
+            <span id="next" class="iconfont icon-xiayishou" onClick="formSubmitfoot(2)"></span>
+            <span id="way" class="iconfont icon-biao-" onClick="formSubmitfoot(3)"></span>
+            <span id="like" class="iconfont icon-xiai1" onClick="formSubmitfoot(4)"></span>
+            <input id="footidentify" type="text" name="identfy" value="" style="display: none">
+            <input id="footcomit" type="text" name="id" value="0" style="display: none">
+        </form>
+    </div>
+
 </footer>
