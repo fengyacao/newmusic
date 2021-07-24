@@ -14,14 +14,17 @@ function formSubmitalbum(value){
 }
 function formSubmitsong(value){
     var idval=$("#textforlogin").attr("identify");
-    console.log("identify:"+idval);
+    var intex=document.getElementById('timenow').innerHTML;
+    console.log("identify:"+idval+"   intex:"+intex);
+    document.getElementById('songnowplaytime').value=intex;
     document.getElementById('songidentify').value=idval;
     document.getElementById('socomit').value=value;
     document.getElementById('contentcomit').submit();
 }
 function formSubmitfoot(value){
     var idval=$("#textforlogin").attr("identify");
-    console.log("identify:"+idval);
+    var idplay=$("#nowplaytext").attr("playid");
+    console.log("identify:"+idval+" idplay:"+idplay);
     switch (value) {
         case 0:
             $("#prev").css({backgroundColor:"aquamarine" });
@@ -73,6 +76,7 @@ function formSubmitfoot(value){
         default:
             break;
     }
+    document.getElementById('footnowid').value=idplay;
     document.getElementById('footidentify').value=idval;
     document.getElementById('footcomit').value=value;
     document.getElementById('comitfoot').submit();
@@ -103,7 +107,7 @@ $(function(){
             $('#audio').attr({play:false});
             $("#pause").attr({class:"iconfont icon-bofang"});
             audio.pause();
-            clearInterval(real)
+            // clearInterval(real);
         }else{
             $('#audio').attr({play:true});
             $('.waveform').css({backgroundColor:"whitesmoke"});
@@ -112,10 +116,11 @@ $(function(){
         }
 
     });
-    if($('audio').attr("play")=="true"){
-        oTimer();
-    }
+
     if(!flag){
+        if($('audio').attr("play")=="true"){
+            oTimer();
+        }
         let AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioContext = new AudioContext();
         let analyser = audioContext.createAnalyser();
@@ -175,6 +180,8 @@ $(function(){
     var obg=document.getElementById("mybg");
     var kuan = odiv.clientWidth;
     var leftmine=0;
+    var oRealTime=document.getElementById("timenow");
+    var oTotalTime=document.getElementById("timetotal");
     obg.onclick=function (e){
         // console.log("ok");
         leftmine = e.pageX +"px";
@@ -183,42 +190,36 @@ $(function(){
         realTime = parseInt((e.pageX*totalTime)/kuan);
         realMinute = doubleNum(parseInt(realTime/60));
         realSecond = doubleNum(realTime%60);
-        //oRealTime = $(".realTime")[0];
         audio.currentTime = realTime;
-        //oRealTime.innerHTML = realMinute + ":" + realSecond;
+        oRealTime.innerHTML = realMinute + ":" + realSecond;
     };
     obar.onclick=function (e){
-        // console.log("ok");
         leftmine = e.pageX +"px";
-        // console.log(leftmine);
         obar.style.width = leftmine;
         realTime = parseInt((e.pageX*totalTime)/kuan);
         realMinute = doubleNum(parseInt(realTime/60));
         realSecond = doubleNum(realTime%60);
-        //oRealTime = $(".realTime")[0];
         audio.currentTime = realTime;
-        //oRealTime.innerHTML = realMinute + ":" + realSecond;
+        oRealTime.innerHTML = realMinute + ":" + realSecond;
     };
     /* 定时器 */
     function oTimer(){
         real = setInterval( function(){
             totalTime = parseInt(audio.duration);
-            // console.log(totalTime);
+            totalMinute = doubleNum(parseInt(totalTime/60));
+            totalSecond = doubleNum(totalTime%60);
+            oTotalTime.innerHTML = totalMinute + ":" + totalSecond;
             realTime = parseInt(audio.currentTime);
             realMinute = doubleNum(parseInt(realTime/60));
             realSecond = doubleNum(realTime%60);
-            // oRealTime.innerHTML = realMinute + ":" + realSecond;
-            // left = (realTime*400)/totalTime;
+            oRealTime.innerHTML = realMinute + ":" + realSecond;
             leftmine = (realTime*kuan)/totalTime;
-             obar.style.width = leftmine  + "px";
+            obar.style.width = leftmine  + "px";
             // if(audio.ended){
             //     Play = false;
             //     oPaly.className = "play iconfont Iconfont icon-zanting";
             //     oPaly.title = "播放";
             // }
-            // console.log(realTime);
-            // console.log(realMinute);
-            // console.log(realSecond);
         },1000)
     }
 

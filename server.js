@@ -32,7 +32,7 @@ var sqlconnection = mysql.createConnection({
 var needjump=false;
 var relogintime=3600000;
 var htmlinner="";
-var nowplay="<a class=\"nowplaytext\">no play</a>";
+var nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">no play</a>";
 var logintext="<a id=\"textforlogin\" class=\"textstyle\" href=\"#\">未登录请登录</a>";
 var textcont="";
 var playing={
@@ -84,10 +84,9 @@ function querytimes(userid){
         });
     });
 }
-
 function queryinnerhtml(){
     return new Promise(resolve => {
-        var sqlq="SELECT albumname,releasedate,releaseby  FROM albumtb";
+        var sqlq="SELECT albumname,releasedate,releaseby FROM albumtb";
         htmlinner="";
         console.log(sqlq);
         sqlconnection.query(sqlq, function (err, results, fields) {
@@ -104,7 +103,7 @@ function queryinnerhtml(){
                 releasedate=sd.format(datare[i].releasedate,'YYYY-MM-DD');
                 htmlinner+="<div class='img'>"
                 htmlinner+="<img  src=\"images/"+i+".jpg\" onClick=\"formSubmitalbum("+(i+1)+")\"/>"
-                htmlinner+="<a class='textline' > 专辑名："+datare[i].albumname+"<br><br>发行日期："+releasedate+"<br><br>发行单位："+datare[i].releaseby+"</a>"
+                htmlinner+="<span class='textline' > 专辑名："+datare[i].albumname+"<br><br>发行日期："+releasedate+"<br><br>发行单位："+datare[i].releaseby+"</span>"
                 htmlinner+="</div>"
             }
             htmlinner+="<input id=\"songidentify\" type=\"text\" name=\"identfy\" value=\"\" style=\"display: none\">";
@@ -114,10 +113,9 @@ function queryinnerhtml(){
         });
     });
 }
-
 function queryinnerhtmlsong(albumid) {
     return new Promise(resolve => {
-        var sqlq="SELECT musicname FROM musictb WHERE albumid=\"" +albumid+"\"";
+        var sqlq="SELECT musicname,musicid FROM musictb WHERE albumid=\"" +albumid+"\"";
         htmlinner="";
         console.log(sqlq);
         sqlconnection.query(sqlq, function (err, results, fields) {
@@ -127,16 +125,17 @@ function queryinnerhtmlsong(albumid) {
             }
             var datastring = JSON.stringify(results);
             var datare = JSON.parse(datastring);
-            console.log(datare);
+            // console.log(datare);
             playing.playinglist=[];
             htmlinner+="<form  id=\"contentcomit\" action=\"song\" method=\"get\"><hr>";
             for(var i=0;i<datare.length;i++){
-                htmlinner+="<div class='musiclist'onClick=\"formSubmitsong("+(i+1)+")\">"
+                htmlinner+="<div class='musiclist'onClick=\"formSubmitsong("+datare[i].musicid+")\">"
                 htmlinner+="<a class='textlinem' > "+(i+1)+" :"+datare[i].musicname+"</a>"
                 htmlinner+="</div>"
-                playing.playinglist[i]=i+1;
+                playing.playinglist[i]=datare[i].musicid;
             }
-            console.log(playing.playinglist);
+            // console.log(playing.playinglist);
+            htmlinner+="<input id=\"songnowplaytime\" type=\"text\" name=\"nowplaytime\" value=\"\" style=\"display: none\">";
             htmlinner+="<input id=\"songidentify\" type=\"text\" name=\"identfy\" value=\"\" style=\"display: none\">";
             htmlinner+="<input id=\"socomit\" type=\"text\" name=\"id\" value=\"0\" style=\"display: none\"> ";
             htmlinner+="</form>";
@@ -144,13 +143,12 @@ function queryinnerhtmlsong(albumid) {
         });
     });
 }
-
 function querysongname(songid) {
     return new Promise(resolve => {
         var sqlq="SELECT musicname FROM musictb WHERE musicid=\"" +songid+"\"";
         nowplay="";
         playing.playingid=songid;
-        console.log(playing.playingid);
+        // console.log(playing.playingid);
         console.log(sqlq);
         sqlconnection.query(sqlq, function (err, results, fields) {
             if (err) {
@@ -159,8 +157,8 @@ function querysongname(songid) {
             }
             var datastring = JSON.stringify(results);
             var datare = JSON.parse(datastring);
-            console.log(datare);
-            nowplay="<a class=\"nowplaytext\">"+datare[0].musicname+"</a>";
+            // console.log(datare);
+            nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\""+songid+"\">"+datare[0].musicname+"</a>";
             resolve('resolved');
         });
     });
@@ -174,7 +172,7 @@ function qureyre(sql,i) {
             }
             datastring = JSON.stringify(results);
             datare = JSON.parse(datastring);
-            console.log(datare);
+            // console.log(datare);
             htmlinner += "<a class='textlinem' > " + (i + 1) + " :" + datare[0].musicname + "</a>"
             resolve('resolved');
         });
@@ -193,7 +191,7 @@ function querylikesong(userid) {
             }
             var datastring = JSON.stringify(results);
             var datare = JSON.parse(datastring);
-            console.log(datare);
+            // console.log(datare);
             playing.playinglist=[];
             htmlinner+="<form  id=\"contentcomit\" action=\"song\" method=\"get\"><hr>";
             for(var i=0;i<datare.length;i++) {
@@ -207,6 +205,7 @@ function querylikesong(userid) {
                 playing.playinglist[i]=datare[i].likesmusicid;
                 htmlinner+="</div>"
             }
+            htmlinner+="<input id=\"songnowplaytime\" type=\"text\" name=\"nowplaytime\" value=\"\" style=\"display: none\">";
             htmlinner+="<input id=\"songidentify\" type=\"text\" name=\"identfy\" value=\"\" style=\"display: none\">";
             htmlinner+="<input id=\"socomit\" type=\"text\" name=\"id\" value=\"0\" style=\"display: none\"> ";
             htmlinner+="</form>";
@@ -214,7 +213,6 @@ function querylikesong(userid) {
         });
     });
 }
-
 function updatecurplay(curid,userid){
     return new Promise(resolve => {
         var sqlq="UPDATE usertb SET currentplayid="+curid+" WHERE userid=" +userid;
@@ -228,7 +226,7 @@ function updatecurplay(curid,userid){
         });
     });
 }
-function qureyte(sql){
+function qureyte(sql,songid){
     return new Promise(resolve => {
         sqlconnection.query(sql, function (err, results, fields) {
             if (err) {
@@ -237,8 +235,8 @@ function qureyte(sql){
             }
             var datastring = JSON.stringify(results);
             var datare = JSON.parse(datastring);
-            console.log(datare);
-            nowplay = "<a class=\"nowplaytext\">" + datare[0].musicname + "</a>";
+            // console.log(datare);
+            nowplay = "<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\""+songid+"\">" + datare[0].musicname + "</a>";
             resolve('resolved');
         });
     });
@@ -256,15 +254,99 @@ function querycurplay(userid){
             var datare = JSON.parse(datastring);
             console.log(datare);
             var sqlq1="SELECT musicname FROM musictb WHERE musicid=\"" +datare[0].currentplayid+"\"";
-            let resul=await qureyte(sqlq1);
+            let resul=await qureyte(sqlq1,datare[0].currentplayid);
             playing.playingid=datare[0].currentplayid;
             resolve('resolved');
         });
     });
 }
-function judgelogin(curid,userid){
+function judgelikesong(curid,userid,nowplaytime,j){
     return new Promise(resolve => {
+        var sqlq="SELECT likesmusicid FROM likes_musicstb WHERE userid=\"" +userid+"\"";
 
+        console.log(sqlq);
+        sqlconnection.query(sqlq, async function (err, results, fields) {
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                return;
+            }
+            var datastring = JSON.stringify(results);
+            var datare = JSON.parse(datastring);
+            var flag=false;
+            // console.log(datare);
+            loginArr[j].temp=null;
+            for(var i=0;i<datare.length;i++) {
+                if(datare[i].likesmusicid==curid){
+                    loginArr[j].temp="<script>document.getElementById('timenow').innerText=\""+nowplaytime+"\";document.getElementById(\"like\").setAttribute(\"class\",\"iconfont icon-xiai\");</script>";
+                    flag=true;
+                    break
+                }
+
+            }
+            if(!flag){
+                loginArr[j].temp="<script>document.getElementById('timenow').innerText=\""+nowplaytime+"\";document.getElementById(\"like\").setAttribute(\"class\",\"iconfont icon-xiai1\");</script>";
+            }
+            resolve('resolved');
+        });
+    });
+}
+function insertlikesong(curid,userid){
+    return new Promise(resolve => {
+        var sqlq="INSERT INTO likes_musicstb VALUES("+userid+"," +curid+")";
+        console.log(sqlq);
+        sqlconnection.query(sqlq, function (err, results, fields) {
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                return;
+            }
+            resolve('resolved');
+        });
+    });
+}
+function deletlikesong(curid,userid){
+    return new Promise(resolve => {
+        var sqlq="DELETE FROM likes_musicstb WHERE likesmusicid="+curid+" AND userid=" +userid;
+        console.log(sqlq);
+        sqlconnection.query(sqlq, function (err, results, fields) {
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                return;
+            }
+            resolve('resolved');
+        });
+    });
+}
+function changelikesong(curid,userid,j){
+    return new Promise(resolve => {
+        var sqlq="SELECT likesmusicid FROM likes_musicstb WHERE userid=\"" +userid+"\"";
+
+        console.log(sqlq);
+        sqlconnection.query(sqlq, async function (err, results, fields) {
+            if (err) {
+                console.error('error connecting: ' + err.stack);
+                return;
+            }
+            var datastring = JSON.stringify(results);
+            var datare = JSON.parse(datastring);
+            var flag=false;
+            // console.log(datare);
+            loginArr[j].temp=null;
+            for(var i=0;i<datare.length;i++) {
+                if(datare[i].likesmusicid==curid){
+                    loginArr[j].temp="<script>document.getElementById(\"like\").setAttribute(\"class\",\"iconfont icon-xiai1\");</script>";
+                    //removethelikesongformsql
+                    let result=await deletlikesong(curid,userid);
+                    flag=true;
+                    break
+                }
+            }
+            if(!flag){
+                loginArr[j].temp="<script>document.getElementById(\"like\").setAttribute(\"class\",\"iconfont icon-xiai\");</script>";
+                //addthelikesongtosql
+                let result=await insertlikesong(curid,userid);
+            }
+            resolve('resolved');
+        });
     });
 }
 
@@ -295,7 +377,7 @@ app.get("/foot",async (req,res)=> {
     }
 
     if(query.id==0){
-        console.log("loginArr[i].playingid: "+loginArr[i].playingid);
+        // console.log("loginArr[i].playingid: "+loginArr[i].playingid);
         if(loginArr[i].playingid==0){
             loginArr[i].playingid=loginArr[i].playinglist.length-1;
         }else{
@@ -303,8 +385,8 @@ app.get("/foot",async (req,res)=> {
         }
     }
     if(query.id==4){
-
-
+        let restchang=await changelikesong(loginArr[i].playinglist[loginArr[i].playingid],query.identfy,i);
+        audiodata+=loginArr[i].temp;
     }
     if(query.id==5){
         if(loginArr[i].playingid==(loginArr[i].playinglist.length-1)){
@@ -333,6 +415,7 @@ app.get("/foot",async (req,res)=> {
     readFile(lrcstr);
     let resutlt=await querytimes(query.identfy);
     if(needjump){
+        let messagedate="<script>alert(\"超时重新登录\");</script>";
         needjump=false;
         res.render("login",{
             messagedate:messagedate
@@ -357,7 +440,7 @@ app.get("/operation",async(req,res)=>{
     let query=req.query;
     let audiodata="<audio></audio>";
     let messagedate="";
-    console.log(query.identfy);
+    // console.log(query.identfy);
     var i=0;
 
     for( ;i<loginArr.length;i++){
@@ -376,7 +459,12 @@ app.get("/operation",async(req,res)=>{
 
     if(query.id==1){
         let resutlt=await queryinnerhtml();
+        loginArr[i].audiodata="<audio></audio>";
+        loginArr[i].textcont="";
         loginArr[i].htmlinner=htmlinner;
+        loginArr[i].nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">无播放项</a>";
+        loginArr[i].playinglist=playing.playinglist;
+        loginArr[i].playingid=0;
         res.render("index",{
             audiodata:loginArr[i].audiodata,
             nowplay:loginArr[i].nowplay,
@@ -398,6 +486,9 @@ app.get("/operation",async(req,res)=>{
         loginArr[i].htmlinner=htmlinner;
         loginArr[i].playinglist=playing.playinglist;
         loginArr[i].playingid=0;
+        loginArr[i].nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">无播放项</a>";;
+        loginArr[i].textcont="";
+        loginArr[i].audiodata="<audio></audio>";;
         res.render("index",{
             audiodata:loginArr[i].audiodata,
             nowplay:loginArr[i].nowplay,
@@ -428,7 +519,7 @@ app.get("/album",async (req,res)=> {
     loginArr[i].audiodata="<audio></audio>";
     loginArr[i].textcont="";
     loginArr[i].htmlinner=htmlinner;
-    loginArr[i].nowplay="<a class=\"nowplaytext\">无播放项</a>";
+    loginArr[i].nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">无播放项</a>";
     loginArr[i].playinglist=playing.playinglist;
     loginArr[i].playingid=0;
 
@@ -469,13 +560,20 @@ app.get("/song",async (req,res)=>{
             messagedate:messagedate
         });
     }else{
-        // audiodata+="<script>document.getElementById('waveform').click();</script>"
         let resutlt=await querysongname(query.id);
+        resutlt=await judgelikesong(query.id,query.identfy,query.nowplaytime,i);
+        audiodata+=loginArr[i].temp;
         audiodata+="<script>document.getElementById('content').style.marginTop=\"500px\";document.getElementById(\"textae\").setAttribute(\"heightvalue\",\"800\");</script>";
         loginArr[i].audiodata=audiodata;
         loginArr[i].nowplay=nowplay;
         loginArr[i].textcont=textcont;
         let atd=await updatecurplay(query.id,query.identfy);
+        for(var k=0;k<loginArr[i].playinglist.length;k++){
+            if(loginArr[i].playinglist[k]==query.id){
+                loginArr[i].playingid=k;
+                break;
+            }
+        }
         res.render("index",{
             htmlinner:loginArr[i].htmlinner,
             logintext:loginArr[i].logintext,
@@ -518,30 +616,35 @@ app.get("/login",(req,res)=>{
             }
             var datastring1=JSON.stringify(results);
             var datare1=JSON.parse(datastring1);
+            var findflag=false;
             console.log(datare1[0].password);
             if(datare1[0].password == query.password) {
-                console.log("true");
+                // console.log("true");
                 var datetime = sd.format(new Date(), 'YYYY-MM-DD HH:mm:ss');
-                console.log(datetime);
+                // console.log(datetime);
                 var i=0;
-                console.log("query.check: "+query.check);
-                console.log("loginArr.length: "+loginArr.length);
                 if(loginArr.length!=0 ){
+                    console.log("loginArr.length："+loginArr.length);
                     for(;i<loginArr.length;i++){
-                        if(datare[0].userid==loginArr[i].loginid && loginArr[i].uuid!=""){
-                            console.log("登录了");
-                            if(typeof(query.check)=="undefined"){
-                                console.log("用户已经登录请在其它设备注销 ");
-                                messagedate="<script>alert(\"用户已经登录请在其它设备注销\");</script>";
-                                res.render("login",{
-                                    messagedate:messagedate
-                                });
-                                return;
+                        console.log("loginArr:"+loginArr);
+                        if(datare[0].userid==loginArr[i].loginid){
+                            if(loginArr[i].uuid!=""){
+                                console.log("loginArr["+i+"].uuid："+loginArr[i].uuid);
+                                if(typeof(query.check)=="undefined"){
+                                    console.log("用户已经登录请在其它设备注销 ");
+                                    messagedate="<script>alert(\"用户已经登录请在其它设备注销\");</script>";
+                                    res.render("login",{
+                                        messagedate:messagedate
+                                    });
+                                    return;
+                                }
+                                if(query.check=="force"){
+                                    loginArr[i].uuid="";
+                                    break;
+                                }
                             }
-                            if(query.check=="force"){
-                                loginArr[i].uuid="";
-                                break;
-                            }
+                            findflag=true;
+                            break;
                         }
                     }
                 }
@@ -554,12 +657,14 @@ app.get("/login",(req,res)=>{
 
                 var logintext="<a id=\"textforlogin\" class=\"textstyle\" href=\"#\" identify=\""+datare[0].userid+"\">"+query.username+"：已登录</a>"
                 let resutltw=await querylikesong(datare[0].userid);
-                let resultc=await querycurplay(datare[0].userid);
-                let audiodata="<audio id=\"audio\" src=\"./music/audio/"+playing.playingid+".mp3\" play=\"true\" autoplay></audio>";
-                audiodata+="<script>document.getElementById('content').style.marginTop=\"500px\";document.getElementById(\"textae\").setAttribute(\"heightvalue\",\"800\");</script>";
-                let lrcstr="./views/music/lrc/"+playing.playingid+".lrc";
-                readFile(lrcstr);
-                if(query.check=="force"){
+                //let resultc=await querycurplay(datare[0].userid);
+                // let audiodata="<audio id=\"audio\" src=\"./music/audio/"+playing.playingid+".mp3\" play=\"true\" autoplay></audio>";
+                // audiodata+="<script>document.getElementById('content').style.marginTop=\"500px\";document.getElementById(\"textae\").setAttribute(\"heightvalue\",\"800\");</script>";
+                // let lrcstr="./views/music/lrc/"+playing.playingid+".lrc";
+                // readFile(lrcstr);
+                textcont="";
+                nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">无播放项</a>";
+                if(query.check=="force"||findflag==true){
                     var lent=i;
                 }else{
                     var lent=loginArr.length;
@@ -574,6 +679,7 @@ app.get("/login",(req,res)=>{
                     audiodata:audiodata,
                     uuid:query.uuid,
                     num:"0",
+                    temp:null,
                     playingid:0,
                     playinglist:playing.playinglist
                 };

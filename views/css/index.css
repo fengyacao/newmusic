@@ -50,6 +50,7 @@ hr {
     margin-bottom: 300px;
 }
 #content .img{
+    float: left;
     margin-bottom: 100px;
     background-image: -webkit-linear-gradient(#2fa8ec,whitesmoke);
     height: 500px;
@@ -65,10 +66,9 @@ hr {
 }
 
 .textline{
-    position: absolute;
+    margin-top: 100px;
+    float: right;
     color:black;
-    left: 540px;
-    top: 10%;
     font-size: 2.2em;
 }
 #canvas{
@@ -216,6 +216,27 @@ hr {
 }
 .style-4 .nav--active .nav__link {
     opacity: 1;
+}
+
+#timenow{
+    position: absolute;
+    background-color: whitesmoke;
+    left: 0;
+    text-align: center;
+    font-size: 60px;
+    width: 170px;
+    height: 80px;
+    bottom: 300px;
+}
+#timetotal{
+    position: absolute;
+    background-color: whitesmoke;
+    right: 0;
+    text-align: center;
+    font-size: 60px;
+    width: 170px;
+    height: 80px;
+    bottom: 300px;
 }
 
 #foot{
