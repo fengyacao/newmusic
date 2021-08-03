@@ -495,6 +495,8 @@ app.get("/foot",async (req,res)=> {
     if(query.id==4){
         let restchang=await changelikesong(loginArr[i].playinglist[loginArr[i].playingid],query.identfy,i);
         audiodata+=loginArr[i].temp;
+        res.send({status:"OK"});
+        return;
     }
     if(query.id==5){
         if(loginArr[i].playingid==(loginArr[i].playinglist.length-1)){

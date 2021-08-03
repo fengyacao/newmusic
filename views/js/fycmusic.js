@@ -70,9 +70,28 @@ function formSubmitfoot(value){
             }
             break;
         case 4:
-            //var classval=$("#like").attr("class");
-            //$("#like").attr({class:"iconfont icon-xiai});
-            break;
+            var transdata={
+                id: value,
+                identfy: idval
+            };
+            if($("#nowplaytext").text()!="无播放项" ){
+                console.log("you nei rong ");
+                var classval=$("#like").attr("class");
+                console.log(classval);
+                $.get("/foot",transdata,
+                    function(result){
+                        console.log(result.status);
+                        if(result.status=="OK"){
+                            if(classval=="iconfont icon-xiai1"){
+                                $("#like").attr({class:"iconfont icon-xiai"});
+                            }
+                            if(classval=="iconfont icon-xiai"){
+                                $("#like").attr({class:"iconfont icon-xiai1"});
+                            }
+                        }
+                    });
+            }else{console.log("无播放项");}
+            return;
         default:
             break;
     }
