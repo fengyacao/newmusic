@@ -38,7 +38,7 @@ var mysqlpool=mysql.createPool({
 // });
 
 var needjump=false;
-var relogintime=3600000;
+var relogintime=432000000;
 var htmlinner="";
 var nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">no play</a>";
 var logintext="<a id=\"textforlogin\" class=\"textstyle\" href=\"#\">未登录请登录</a>";
@@ -669,6 +669,7 @@ app.get("/song",async (req,res)=>{
         res.render("login",{
             messagedate:messagedate
         });
+        loginArr[i].uuid="";
     }else{
         let resutlt=await querysongname(query.id);
         resutlt=await judgelikesong(query.id,query.identfy,query.nowplaytime,i);
@@ -694,10 +695,44 @@ app.get("/song",async (req,res)=>{
     }
 });
 
-app.get("/login",(req,res)=>{
+app.get("/login",async(req,res)=>{
     let query=req.query;
     let audiodata="<audio></audio>";
     let messagedate="<script>alert(\"不存在的用户名\");</script>";
+    if(query.judge=="1"){
+        var i=0;
+        if(loginArr.length!=0 ){
+            console.log("loginArr.length："+loginArr.length);
+            for(;i<loginArr.length;i++){
+                console.log("loginArr:"+loginArr);
+                if(loginArr[i].uuid==query.uuid){
+                    let resutlt=await querytimes(loginArr[i].loginid);
+                    if(needjump) {
+                        console.log("a");
+                        needjump = false;
+                        loginArr[i].uuid="";
+                        break;
+                    }else{
+                        console.log("b");
+                        console.log(loginArr[i]);
+                        res.render("index",{
+                            htmlinner:loginArr[i].htmlinner,
+                            textcont:loginArr[i].textcont,
+                            nowplay:loginArr[i].nowplay,
+                            logintext:loginArr[i].logintext,
+                            audiodata:loginArr[i].audiodata
+                        });
+                    }
+                    return;
+                }
+            }
+        }
+        messagedate="<a id='ret' style='display: none'>timeout</a>";
+        res.render("login", {
+            messagedate: messagedate
+        });
+        return;
+    }
     var sqlq="SELECT userid FROM usertb WHERE username=\"" +query.username+"\"";
     console.log("uuid:"+query.uuid);
     console.log(sqlq);

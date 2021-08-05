@@ -17,6 +17,7 @@
     <!--//Style-CSS -->
     <script type="text/ecmascript" src="js/md5.js"></script>
     <script type="text/ecmascript" src="js/fp.min.js"></script>
+    <script type="text/ecmascript" src="js/jquery-3.6.0.min.js"></script>
     <script>
         window.onload= function(){
             initUserUUId();
@@ -27,6 +28,17 @@
                     const UUID = result.visitorId;
                     console.log("uuid: "+UUID);
                     document.getElementById('uuid').value=UUID;
+                    if (document.getElementById("ret")) {
+                        var intext=document.getElementById('ret').innerText;
+                        console.log(intext);
+                        if(intext!="timeout"){
+                            document.getElementById('judge').value="1";
+                            document.getElementById('logincomit').submit();
+                        }
+                    }else{
+                        document.getElementById('judge').value="1";
+                        document.getElementById('logincomit').submit();
+                    }
                 });
             });
         }
@@ -51,17 +63,18 @@
                 <div class="form-61 form-register">
                     <h4 class="form-head">登录</h4>
 
-                        <form action="login" method="GET" onsubmit="return checkdata()">
+                        <form id="logincomit" action="login" method="GET" onsubmit="return checkdata()">
                         <div class="">
                             <p class="text-head">登录名</p>
-                            <input type="text" name="username" class="input" required />
+                            <input type="text" name="username" class="input" value="请输入" required />
                         </div>
                         <div class="">
                             <p class="text-head">密码</p>
-                            <input id="passwd" type="password" name="password" class="input" required />
+                            <input id="passwd" type="password" name="password" class="input" value="***" required />
                         </div>
                         <div class="" style="display: none">
                             <input id="uuid" type="text" name="uuid" value="" />
+                            <input id="judge" type="text" name="judge" value="0" >
                         </div>
                         <label class="remember">
                             <input type="checkbox" name="check" value="force">
@@ -69,7 +82,7 @@
                         </label>
                         <button id="butt" type="submit" class="signinbutton btn">登录</button>
                         <label class="remember">
-                            未注册用户 <a href="signup.html">注册</a>
+                            未注册用户 <a href="#">注册</a>
                         </label>
                     </form>
                 </div>
