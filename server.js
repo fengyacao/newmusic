@@ -5,6 +5,10 @@ const fs = require('fs');
 const app = express();
 const ejs = require('ejs');
 var sd = require('silly-datetime');
+var path= require("path");
+var find=false;
+
+var fileex=new Array(".webm",".flac",".mp3");
 
 var options = {
     index: "index.html"
@@ -457,6 +461,20 @@ function changelikesong(curid,userid,j){
         });
     });
 }
+function isFileexit(file) {
+    return new Promise(resolve => {
+        fs.access(file, fs.constants.F_OK, (err) => {
+            //console.log(`${file} ${err ? '不存在' : '存在'}`);
+            if(err){
+                find=false;
+                resolve('resolved');
+                return;
+            }
+            find=true;
+            resolve('resolved');
+        });
+    });
+}
 
 app.get("/",(req,res)=>{
     let messagedate="";
@@ -520,7 +538,17 @@ app.get("/foot",async (req,res)=> {
     }
     nowmusic=loginArr[i].playinglist[loginArr[i].playingid];
     console.log("nowmusic: " +nowmusic);
-    audiodata+="<audio id=\"audio\" src=\"./music/audio/"+nowmusic+".mp3\" play=\"true\" autoplay></audio>";
+
+    var nu=0
+    for(;nu < fileex.length;nu++){
+        var retpath=path.join(__dirname+"/views/music/audio/"+nowmusic+fileex[nu]);
+        let aa=await isFileexit(retpath);
+        if(find){
+            find=false;
+            break;
+        }
+    }
+    audiodata+="<audio id=\"audio\" src=\"./music/audio/"+nowmusic+fileex[nu]+"\" play=\"true\" autoplay></audio>";
     let lrcstr=__dirname + "/views/music/lrc/"+nowmusic+".lrc";
     readFile(lrcstr);
     let resutlt=await querytimes(query.identfy);
@@ -532,6 +560,8 @@ app.get("/foot",async (req,res)=> {
         });
     }else{
         let resutlt=await querysongname(nowmusic);
+        resutlt=await judgelikesong(nowmusic,query.identfy,query.nowplaytime,i);
+        audiodata+=loginArr[i].temp;
         audiodata+="<script>document.getElementById('content').style.marginTop=\"500px\";document.getElementById(\"textae\").setAttribute(\"heightvalue\",\"800\");</script>";
     }
     loginArr[i].nowplay=nowplay;
@@ -646,17 +676,28 @@ app.get("/song",async (req,res)=>{
 
     let messagedate="<script>alert(\"超时重新登录\");</script>";
     let query=req.query;
-    let audiodata="<audio id=\"audio\" src=\"./music/audio/"+query.id+".mp3\" play=\"true\" autoplay></audio>";
+    var nu=0
+
+    for(;nu < fileex.length;nu++){
+        var retpath=path.join(__dirname+"/views/music/audio/"+query.id+fileex[nu]);
+        console.log(retpath);
+        let aa=await isFileexit(retpath);
+        if(find){
+            find=false;
+            break;
+        }
+    }
+    let audiodata="<audio id=\"audio\" src=\"./music/audio/"+query.id+fileex[nu]+"\" play=\"true\" autoplay></audio>";
     let lrcstr=__dirname + "/views/music/lrc/"+query.id+".lrc";
     readFile(lrcstr);
-    var i=0
+    var i=0;
     for( ;i<loginArr.length;i++){
         if(loginArr[i].loginid==query.identfy){
             break;
         }
     }
     if(loginArr.length==0||i==loginArr.length){
-        messagedate=""
+        messagedate="";
         res.render("login",{
             messagedate:messagedate
         });
