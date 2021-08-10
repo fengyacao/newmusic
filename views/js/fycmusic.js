@@ -196,9 +196,11 @@ $(function(){
 
     var odiv=document.getElementById("mydiv");
     var obar=document.getElementById("mybar");
+    var obbar=document.getElementById("mybuffbar");
     var obg=document.getElementById("mybg");
     var kuan = odiv.clientWidth;
     var leftmine=0;
+    var bufftime=0;
     var oRealTime=document.getElementById("timenow");
     var oTotalTime=document.getElementById("timetotal");
     obg.onclick=function (e){
@@ -213,6 +215,16 @@ $(function(){
         oRealTime.innerHTML = realMinute + ":" + realSecond;
     };
     obar.onclick=function (e){
+        audio.load();
+        leftmine = e.pageX +"px";
+        obar.style.width = leftmine;
+        realTime = parseInt((e.pageX*totalTime)/kuan);
+        realMinute = doubleNum(parseInt(realTime/60));
+        realSecond = doubleNum(realTime%60);
+        audio.currentTime = realTime;
+        oRealTime.innerHTML = realMinute + ":" + realSecond;
+    };
+    obbar.onclick=function (e){
         leftmine = e.pageX +"px";
         obar.style.width = leftmine;
         realTime = parseInt((e.pageX*totalTime)/kuan);
@@ -234,6 +246,13 @@ $(function(){
             oRealTime.innerHTML = realMinute + ":" + realSecond;
             leftmine = (realTime*kuan)/totalTime;
             obar.style.width = leftmine  + "px";
+            var timeRanges = audio.buffered;
+            // 获取以缓存的时间
+            var timeBuffered = timeRanges.end(timeRanges.length-1);
+            var timeBufferedend = timeRanges.start(timeRanges.length-1);
+            bufftime=(timeBuffered*kuan)/totalTime;
+            //console.log(timeRanges.length +"--"+timeBufferedend+"--"+timeBuffered);
+            obbar.style.width = bufftime  + "px";
             // if(audio.ended){
             //     Play = false;
             //     oPaly.className = "play iconfont Iconfont icon-zanting";

@@ -6,6 +6,9 @@ html{
     background-color: powderblue;
     scroll-behavior: smooth;
 }
+body{
+    overflow-wrap: break-word;
+}
 hr {
     height:20px;
     background-image: -webkit-linear-gradient(powderblue,white);
@@ -51,6 +54,7 @@ hr {
 }
 #content .img{
     float: left;
+    width:99%;
     margin-bottom: 100px;
     background-image: -webkit-linear-gradient(#2fa8ec,whitesmoke);
     height: 500px;
@@ -67,6 +71,7 @@ hr {
 
 .textline{
     margin-top: 100px;
+    margin-right: 20px;
     float: right;
     color:black;
     font-size: 2.2em;
@@ -224,7 +229,7 @@ hr {
     left: 0;
     text-align: center;
     font-size: 60px;
-    width: 170px;
+    width: 210px;
     height: 80px;
     bottom: 300px;
 }
@@ -234,7 +239,7 @@ hr {
     right: 0;
     text-align: center;
     font-size: 60px;
-    width: 170px;
+    width: 210px;
     height: 80px;
     bottom: 300px;
 }
@@ -259,4 +264,5 @@ hr {
 }
 
 .progress_bg{height: 100%;width:100%; border: 1px solid #ddd; border-radius: 0;overflow: hidden;background-color:#f2f2f2;}/**/
-.progress_bar{ position: absolute; width: 0; height: 100%; border-radius: 0;background: #5FB878; }
+.progress_bbar{ position: absolute; width: 0; height: 100%; border-radius: 0;background: #5566;z-index: 98; }
+.progress_bar{ position: absolute; width: 0; height: 100%; border-radius: 0;background: #5FB878;z-index: 99; }
