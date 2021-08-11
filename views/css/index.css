@@ -248,7 +248,7 @@ hr {
     width:100%;
     position: absolute;
     bottom: 0;
-    background-color: #3498DB;
+    background-color: powderblue;
 }
 #foot .progress{
      position: relative;
@@ -262,6 +262,12 @@ hr {
     padding-left: 10px;
     height: 200px;
 }
+#prev,#pause,#next,#way,#like{
+    position: relative;
+    float: left;
+    width: 20%;
+}
+
 
 .progress_bg{height: 100%;width:100%; border: 1px solid #ddd; border-radius: 0;overflow: hidden;background-color:#f2f2f2;}/**/
 .progress_bbar{ position: absolute; width: 0; height: 100%; border-radius: 0;background: #5566;z-index: 98; }
