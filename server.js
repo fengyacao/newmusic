@@ -29,7 +29,7 @@ var mysqlpool=mysql.createPool({
     host     : 'localhost',
     user     : 'root',
     password : '123456',
-    database : 'msdb',
+    database : 'msDB',
     multipleStatements: true
 });
 
@@ -598,20 +598,9 @@ app.get("/operation",async(req,res)=>{
     }
 
     if(query.id==1){
-        let resutlt=await queryinnerhtml();
-        loginArr[i].audiodata="<audio></audio>";
-        loginArr[i].textcont="";
+        let resutlt=await queryinnerhtml();      
         loginArr[i].htmlinner=htmlinner;
-        loginArr[i].nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">无播放项</a>";
-        loginArr[i].playinglist=playing.playinglist;
-        loginArr[i].playingid=0;
-        res.render("index",{
-            audiodata:loginArr[i].audiodata,
-            nowplay:loginArr[i].nowplay,
-            textcont:loginArr[i].textcont,
-            logintext:loginArr[i].logintext,
-            htmlinner:loginArr[i].htmlinner
-        });
+        res.send({innerht:loginArr[i].htmlinner});
     }
 
     if(query.id==3){
@@ -624,18 +613,7 @@ app.get("/operation",async(req,res)=>{
     if(query.id==4){
         let resutltw=await querylikesong(query.identfy);
         loginArr[i].htmlinner=htmlinner;
-        loginArr[i].playinglist=playing.playinglist;
-        loginArr[i].playingid=0;
-        loginArr[i].nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">无播放项</a>";;
-        loginArr[i].textcont="";
-        loginArr[i].audiodata="<audio></audio>";;
-        res.render("index",{
-            audiodata:loginArr[i].audiodata,
-            nowplay:loginArr[i].nowplay,
-            textcont:loginArr[i].textcont,
-            logintext:loginArr[i].logintext,
-            htmlinner:loginArr[i].htmlinner
-        });
+        res.send({innerht:loginArr[i].htmlinner});
     }
 });
 
@@ -656,20 +634,8 @@ app.get("/album",async (req,res)=> {
     }
 
     let resutlt=await queryinnerhtmlsong(query.id);
-    loginArr[i].audiodata="<audio></audio>";
-    loginArr[i].textcont="";
     loginArr[i].htmlinner=htmlinner;
-    loginArr[i].nowplay="<a id=\"nowplaytext\" class=\"nowplaytext\" playid=\"\">无播放项</a>";
-    loginArr[i].playinglist=playing.playinglist;
-    loginArr[i].playingid=0;
-
-    res.render("index",{
-        htmlinner:loginArr[i].htmlinner,
-        logintext:loginArr[i].logintext,
-        nowplay:loginArr[i].nowplay,
-        textcont:loginArr[i].textcont,
-        audiodata:loginArr[i].audiodata
-    });
+    res.send({innerht:loginArr[i].htmlinner});
 });
 
 app.get("/song",async (req,res)=>{

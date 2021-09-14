@@ -1,16 +1,31 @@
 function formSubmit(value){
     var idval=$("#textforlogin").attr("identify");
     console.log("identify:"+idval);
-    document.getElementById('menuidentify').value=idval;
-    document.getElementById('bucomit').value=value;
-    document.getElementById('comit').submit();
+	var transdata={
+        id: value,
+        identfy: idval
+    };
+    $.get("/operation",transdata,
+        function(result){
+            // console.log(result.innerht);
+            document.getElementById('content').innerHTML=result.innerht;
+	    document.getElementById('content').innerHTML+="<div style=\"opacity: 0;height:90px\"></div>";
+        });
+    $('.nav__trigger').click();
 }
 function formSubmitalbum(value){
     var idval=$("#textforlogin").attr("identify");
     console.log("identify:"+idval);
-    document.getElementById('songidentify').value=idval;
-    document.getElementById('socomit').value=value;
-    document.getElementById('contentcomit').submit();
+    var transdata={
+        id: value,
+        identfy: idval
+    };
+	$.get("/album",transdata,
+        function(result){
+            // console.log(result.innerht);
+            document.getElementById('content').innerHTML=result.innerht;
+	    document.getElementById('content').innerHTML+="<div style=\"opacity: 0;height:90px\"></div>";
+        });
 }
 function formSubmitsong(value){
     var idval=$("#textforlogin").attr("identify");
